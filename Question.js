@@ -6,18 +6,14 @@ class Question extends React.Component {
         super(props)
         this.state = {
             id: props.index,
-            Question: "",
-            Description: "",
-            Answer: "",
+            Question: '',
+            Description: '',
+            Answer: '',
             values: [],
         }
+
     }
-
-    // someFn = () => {
-    //     this.props.callbackFromParent(this.state);
-    // }
     createUI() {
-
         return this.state.values.map((el, i) =>
             <div key={i} style={{ display: "inline-flex" }}>
                 {/* <input type="radio" className="form-control" value={el || ''} onChange={this.handleChange.bind(this, i)} /> */}
@@ -44,8 +40,9 @@ class Question extends React.Component {
         this.props.callbackFromParent(this.state);
     }
     handleState(e) {
-        this.setState({ [e.target.name]: e.target.value });
-        this.props.callbackFromParent(this.state);
+        this.setState({ [e.target.name]: e.currentTarget.value });
+        console.log("child", this.state) // SO why yu are logging here 
+        //this.props.callbackFromParent(this.state);
     }
     render() {
         return (
@@ -55,68 +52,21 @@ class Question extends React.Component {
                     <div>
                         <label style={{ width: "100px" }}>Question</label>
                     </div>
-                    <div><textarea type="textarea" onChange={this.handleState.bind(this)} name="Question" style={{ width: "760px", resize: "both" }} className="form-control dept-z-1" /> </div>
+                    <div><textarea type="textarea" onChange={e => { this.props.handleQ(e, this.props.index) }} name="Question" style={{ width: "760px", resize: "both" }} className="form-control dept-z-1" /> </div>
                 </div><br />
                 <div style={{ display: "inline-flex", paddingLeft: "15px" }}>
-
                     <div><label style={{ width: "100px" }}>Description</label></div>
-                    <div><textarea name="Description" onChange={this.handleState.bind(this)} style={{ width: " 760px", resize: "both" }} className="form-control dept-z-1" /></div>
+                    <div><textarea name="Description" onChange={e => { this.props.handleQ(e, this.props.index) }} style={{ width: " 760px", resize: "both" }} className="form-control dept-z-1" /></div>
                 </div><br />
                 <div style={{ display: "inline-flex", paddingLeft: "15px" }}>
                     <div><label style={{ width: "100px" }}>Answer</label></div>
-                    <div><textarea name="Answer" onChange={this.handleState.bind(this)} style={{ width: "760px", resize: "both" }} className="form-control dept-z-1" /> </div>
+                    <div><textarea name="Answer" onChange={e => { this.props.handleQ(e, this.props.index) }} style={{ width: "760px", resize: "both" }} className="form-control dept-z-1" /> </div>
                 </div>
-                {/* <table>
-                    <tbody>
-                        <tr>
-                            <td><label>Question</label></td>
-                            <td colSpan="2"><textarea name="Question`" style={{ width: " calc(250px + 100vw - 1024px)!important;", resize: "both" }} className="form-control dept-z-1" /> </td>
-                            <td ><label>Description</label></td>
-                            <td colSpan="2"><textarea name="Description" style={{ width: " calc(250px + 100vw - 1024px)!important;", resize: "both" }} className="form-control dept-z-1" /> </td>
-                        </tr>
-                        <tr>
-                            <td><label>Answer</label></td>
-                            <td colSpan="2" ><textarea name="Answer`" style={{ width: " calc(250px + 100vw - 1024px)!important", resize: "both" }} className="form-control dept-z-1" /> </td>
-                        </tr>
-                        <tr>
-                            <td colSpan="4">  { */}
                 <br />{this.createUI()}
-                {/* <td> <input
-                                    type="radio"
-                                    id="1"
-                                    name="rdOption1"
-                                    value="rdOption1"
-                                //onChange={this.handlechange}
-                                //checked={this.state.selectedOption === "A"}
-                                />
-                                    <label for="rdoption1">Option1</label>
-                                    <input id="2"
-                                        type="radio"
-                                        name="rdoption2"
-                                        value="rdoption2"
-                                    //onChange={this.handlechange}
-                                    //checked={this.state.selectedOption === "A"}
-                                    />
-                                    <label for="rdoption2">Option2</label> */}
                 <br />
                 <button type="Button" style={{ cursor: "pointer", display: "inline-flex" }}
                     onClick={this.addRadio.bind(this)}
                 >Add Option</button>
-                {/* <AddIcon style={{ cursor: "pointer", display: "inline-flex" }}
-                    onClick={this.addRadio.bind(this)}
-                ></AddIcon> */}
-                {/* <DeleteIcon style={{ cursor: "pointer" }}
-                                    // onClick={() => props.handleClick(item)}
-                                    ></DeleteIcon> */}
-                {/* </td>
-                        </tr>
-                    </tbody>
-                </table> */}
-                {/* <div style={{ display: "inline-flex" }}>
-                    <label>Question</label>
-                    <textarea style={{ width: " calc(250px + 100vw - 1024px)!important;", resize: "both" }} className="form-control dept-z-1" />
-                </div> */}
-
             </div>
         )
     }

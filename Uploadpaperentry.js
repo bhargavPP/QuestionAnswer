@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import Question from "./Question";
-function getUnique(arr, index) {
+// function getUnique(arr, index) {
 
-    const unique = arr
-        .map(e => e[index])
+//     const unique = arr
+//         .map(e => e[index])
 
-        // store the keys of the unique objects
-        .map((e, i, final) => final.indexOf(e) === i && i)
+//         // store the keys of the unique objects
+//         .map((e, i, final) => final.indexOf(e) === i && i)
 
-        // eliminate the dead keys & store unique objects
-        .filter(e => arr[e]).map(e => arr[e]);
+//         // eliminate the dead keys & store unique objects
+//         .filter(e => arr[e]).map(e => arr[e]);
 
-    return unique;
-}
+//     return unique;
+// }
 
 export class Uploadpaperentry extends Component {
     constructor(props) {
@@ -21,8 +21,8 @@ export class Uploadpaperentry extends Component {
         this.state = {
             Id: 0,
             name: "first",
-            QuestionArray: [],
-            QuestionArrayRes: [],
+            QuestionArray: [{}],
+            QuestionArrayRes: [{ Question: '' }],
             BranchId: 1,
             PaperName: "",
             Subject: "",
@@ -36,7 +36,7 @@ export class Uploadpaperentry extends Component {
     validateForm() {
         let formisValid = true;
         let error = {};
-        console.log(this.state.QuestionArrayRes)
+        // console.log(this.state.QuestionArrayRes)
         if (this.state.PaperName === "") {
             formisValid = false;
             this.PaperNameInput.focus();
@@ -92,8 +92,8 @@ export class Uploadpaperentry extends Component {
     }
     AddQuestion = e => {
         // this.setState({ QuestionArray: this.state.QuestionArray.push(<Question />) });
-        this.setState(prevState => ({ QuestionArray: [...prevState.QuestionArray, ''] }))
-        //  console.log(this.state)
+        this.setState(prevState => ({ QuestionArray: [...prevState.QuestionArray, [{}]] }))
+        console.log(this.state)
     }
 
     myCallback = (datafromChild) => {
@@ -105,7 +105,33 @@ export class Uploadpaperentry extends Component {
         // console.log("resul", getUnique(this.state.QuestionArrayRes, 'id'))
     }
     renderBlocks = () => {
-        return this.state.QuestionArray.map((question, idx) => <Question callbackFromParent={this.myCallback} key={idx + 1} index={idx + 1} />)
+        return this.state.QuestionArray.map((question, idx) => { return (<Question callbackFromParent={this.myCallback} handleQ={this.handleQ} key={idx + 1} index={idx + 1} />) });//handleQ={this.handleQ.bind(idx + 1)}
+    }
+    handleQ = (e, index) => {
+        e.preventDefault();
+        //console.log(e.target.name)
+        //console.log(index)
+        const val = [...this.state.QuestionArrayRes];
+
+        // console.log(index + ":" + val[index].Question)
+        if (e.target.name === 'Question')
+            val[index].Question = e.target.value;
+        else if (e.target.name === 'Answer')
+            val[index].Answer = e.target.value;
+        else if (e.target.name === 'Description')
+            val[index].Description = e.target.value;
+
+        this.setState({ QuestionArrayRes: val });
+        //console.log(this.state.QuestionArrayRes)
+    }
+    handleOp = (e, index) => {
+        //  e.preventDefault();
+
+        const val = [...this.state.QuestionArrayRes.values];
+        val[index] = e.target.value;
+
+        this.setState({ QuestionArrayRes: val });
+        console.log(this.state.QuestionArrayRes)
     }
     render() {
         return (
@@ -124,41 +150,9 @@ export class Uploadpaperentry extends Component {
                                     </td>
                                     <td >
                                         <input type="text" ref={(input) => { this.PaperNameInput = input; }} className="form-control z-depth-1" name="PaperName" value={this.state.PaperName} onChange={this.handleChange} />
-                                        {/* <select
-                                            className="form-control z-depth-1"
-                                            value={this.state.StockId}
-                                            onChange={e => {
-                                                this.setState({ StockId: e.target.value })
-                                            }}
-                                        >
-                                            {this.state.Stock.map(stk => (
-                                                <option key={stk.value} value={stk.value}>
-                                                    {stk.display}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        <span style={{ color: "red", marginTop: "5px" }}>
-                                            {this.state.error["StockId"]}
-                                        </span> */}
                                     </td>
                                     <td><label>Subject</label></td>
                                     <td><input type="text" ref={(input) => { this.SubjectInput = input; }} name="Subject" className="form-control z-depth-1" value={this.state.Subject} onChange={this.handleChange} /> </td>
-                                    {/* <td>  <select
-                                        className="form-control z-depth-1"
-                                        value={this.state.ToUserId}
-                                        onChange={e => {
-                                            this.setState({ ToUserId: e.currentTarget.value });
-                                        }}
-                                    >
-                                        {this.state.User.map(ur => (
-                                            <option key={ur.value} value={ur.value}>
-                                                {ur.display}
-                                            </option>
-                                        ))}
-                                    </select>
-                                        <span style={{ color: "red", marginTop: "5px" }}>
-                                            {this.state.error["ToUserId"]}
-                                        </span></td> */}
                                 </tr>
                                 <tr>
                                     <td>
@@ -179,40 +173,9 @@ export class Uploadpaperentry extends Component {
                                             <option key={3} value={3}>Branch 3</option>
 
                                         </select>
-                                        {/* <textarea
-                                            id="ComplainDetail"
-                                            name="ComplainDetail"
-                                            required="required"
-                                            className="form-control z-depth-1"
-                                            type="textarea"
-                                            placeholder="વિગત દાખલ કરો"
-                                            value={this.state.ComplainDetail}
-                                            onChange={e => { this.setState({ ComplainDetail: e.target.value }) }}
-                                        />
-                                        <span style={{ color: "red", marginTop: "5px" }}>
-                                            {this.state.error["ComplainDetail"]}
-                                        </span> */}
                                     </td>
                                 </tr>
-                                {/* <tr>
-                                    <td colSpan="4"> <button
-                                        type="Button"
-                                        id="Submit"
-                                        className="btn btn-primary"
-                                        onClick={this.AddComplain}
-                                    >
-                                        Submit
-                    </button>
-                                        &nbsp;
-                    <button
-                                            type="Button"
-                                            id="Cancel"
-                                            className="btn btn-secondary"
-                                            onClick={this.clearState}
-                                        >
-                                            Clear
-                    </button></td>
-                                </tr> */}
+
                             </tbody>
                         </table>
                         &nbsp;
@@ -220,7 +183,7 @@ export class Uploadpaperentry extends Component {
                         {/* {
                             this.state.map((item, idx) => ( */}
                         <div className="title">Question Paper</div>
-                        <Question index={0} callbackFromParent={this.myCallback} />
+                        {/* <Question index={0} callbackFromParent={this.myCallback} handleQ={this.handleQ} /> */}
                         {this.renderBlocks()}
                         {!this.state.isFormValid ? (
                             <div>
